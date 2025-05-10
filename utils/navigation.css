@@ -1,0 +1,7 @@
+i:hover{
+    cursor: pointer;
+}
+
+#nav{
+    background-image: linear-gradient(to right, white , rgb(220, 213, 213) );
+}
