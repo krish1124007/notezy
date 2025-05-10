@@ -26,12 +26,24 @@
     <meta property="og:url" content="https://notezy07.netlify.app/">
     <meta property="og:type" content="website">
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="./css/index.css">
+    
     
 </head>
 
 <body>
+    <!-- Cursor Elements -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Floating Background Elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
     <div class="container">
         <header>
             <h1>Welcome to Notezy</h1>
@@ -39,35 +51,170 @@
         </header>
 
         <main>
-            <section>
-                <h2>Get Started</h2>
-                <p>Start create Your Amazing Notes</p>
-                <a href="./html/create.html" class="btn">Sign Up</a>
+            <section class="sec1">
+                
+                <p>Start creating your amazing notes today and boost your productivity to new heights!</p>
+                <a href="./html/create.html" class="btn">Start Today</a>
             </section>
 
-            <section>
-                <h2>Features</h2>
+            <!-- <section>
+                <h2><i class="fas fa-star"></i> Features</h2>
                 <ul>
                     <li>Simple and intuitive interface</li>
                     <li>Organize notes by categories</li>
-                    <li>Search functionality</li>
+                    <li>Powerful search functionality</li>
                     <li>Dark mode support</li>
                 </ul>
             </section>
 
             <section>
-                <h2>Contact Us</h2>
-                <p>If you have any questions, feel free to reach out!</p>
-                <a href="contact.html" class="btn">Contact Us</a>
-            </section>
+                <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+                <p>If you have any questions or feedback, our team is ready to help you!</p>
+                <a href="contact.html" class="btn">Contact Us <i class="fas fa-paper-plane"></i></a>
+            </section> -->
         </main>
 
         <footer>
-            <p>&copy; 2023 Notezy. All rights reserved.</p>
+            <p>&copy; 2025 Notezy. All rights reserved.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
         </footer>
     </div>
 
-    <!-- ✅ JavaScript Links -->
+    <!-- JavaScript -->
     <script src="../js/index.js"></script>
+    
+    <script>
+        // Cursor Animation
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Delay the follower for a trailing effect
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+            
+            // Create a ripple effect when mouse moves
+            if (Math.random() > 0.7) {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple-effect';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                document.body.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 1000);
+            }
+        });
+        
+        // Interactive elements effect
+        const interactiveElements = document.querySelectorAll('a, button, .btn, section');
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.backgroundColor = 'rgba(253, 121, 168, 0.5)';
+                cursorFollower.style.transform = 'translate(-50%, -50%) scale(0.5)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.backgroundColor = 'var(--accent-color)';
+                cursorFollower.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+        
+        // Add ripple effect to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                    window.location.href = this.href;
+                }, 1000);
+            });
+        });
+        
+        // Floating elements animation
+        const floatingElements = document.querySelectorAll('.floating-element');
+        floatingElements.forEach(el => {
+            // Randomize initial position slightly
+            const randomX = Math.random() * 20 - 10;
+            const randomY = Math.random() * 20 - 10;
+            el.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+        
+        // Page load animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+    
+    <style>
+        /* Additional styles for JavaScript effects */
+        .ripple-effect {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(108, 92, 231, 0.3);
+            transform: translate(-50%, -50%);
+            animation: ripple 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 9997;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(10);
+                opacity: 0;
+            }
+        }
+        
+        .btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: buttonRipple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes buttonRipple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        body.loaded .container {
+            opacity: 1;
+        }
+    </style>
 </body>
 </html>
