@@ -145,6 +145,7 @@ main {
 
 #pages {
   width: 100%;
+  
 }
 
 .page-tab {
@@ -254,53 +255,69 @@ main {
 /* Responsive Design */
 @media (max-width: 768px) {
   body {
-    grid-template-columns: 1fr;
-    grid-template-rows: 60px 1fr 60px;
-    grid-template-areas:
-      "header"
-      "main"
-      "sidebar";
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  #header {
+    width: 100%;
+  }
+
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  #tool-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
 
   #side-bar {
     flex-direction: row;
-    justify-content: space-around;
-    padding: 0px;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    background-color: var(--dark-color);
+    display: none;
   }
 
   #pages {
     display: flex;
+    justify-content: space-around;
+    width: 100%;
   }
 
   .page-tab {
-    padding: 0 15px;
+    flex: 1;
+    padding: 10px;
   }
 
-  .page-tab::after {
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    width: 0;
-    height: 4px;
+  .page-tab i {
+    font-size: 28px;
+    padding: 10px;
   }
 
-  .page-tab.active::after {
-    width: 50%;
-    height: 4px;
+  #window {
+    width: 100%;
+    padding: 15px;
   }
 
-  .add-page-btn {
-    margin: 10px;
+  .page {
+    width: 100%;
+    padding: 10px;
+    min-height: 400px;
   }
 
-  #side-bar {
-    max-width: 70px; /* Hide sidebar content, only showing icons or small buttons */
-    transition: max-width 0.3s ease;
-  }
-
-  @media (max-width: 768px) {
-    #side-bar {
-      max-width: 0; /* Hide completely on smaller screens */
-    }
+  .dropdown-content {
+    position: fixed;
+    bottom: 60px;
+    left: 10px;
+    right: 10px;
+    z-index: 999;
   }
 }
+
