@@ -1,110 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Meta Tags for SEO and Mobile Responsiveness -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- ✅ Title for Search Engines -->
-    <title>Notezy07 || Organize Ideas, Notes & Tasks Easily</title>
-
-    <!-- ✅ Description for Google -->
-    <meta name="description" content="Notezy07 is a fast and simple tool to organize your notes, ideas, and daily tasks online. Boost your productivity now!">
-
-    <!-- ✅ Keywords (optional) -->
-    <meta name="keywords" content="Notezy07, online notes, note taking, productivity, organize ideas, notezy, digital notebook">
-
-    <!-- ✅ Author -->
-    <meta name="author" content="Krish">
-
-    <!-- ✅ Favicon (logo/icon in browser tab) -->
-    <link rel="icon" href="../images/logozy.png" type="image/x-icon">
-
-    <!-- ✅ Open Graph (for social media sharing) -->
-    <meta property="og:title" content="Notezy07 - create notes">
-    <meta property="og:description" content="create your fast and easy notes">
-    <meta property="og:image" content="https://notezy07.netlify.app/images/logozy.png">
-    <meta property="og:url" content="https://notezy07.netlify.app/html/create.html">
-    <meta property="og:type" content="website">
-
-    <!-- ✅ Twitter Card (optional but good for engagement) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Notezy07 - Note Taking Made Simple">
-    <meta name="twitter:description" content="A smart way to write, organize, and manage your notes online.">
-    <meta name="twitter:image" content="https://notezy07.netlify.app/images/logozy.png">
-
-    <!-- ✅ Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-   
-
-    <!-- ✅ Additional Meta Tags for Social and SEO (Open Graph, Twitter Card, etc.) -->
-    <meta property="og:locale" content="en_US">
-    <meta property="og:site_name" content="Notezy07">
-    <meta name="robots" content="index, follow">
-
-     <!-- ✅ Google Fonts (if any, for custom fonts) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- ✅ Custom CSS -->
-    <link rel="stylesheet" href="../css/create.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Roboto+Mono&display=swap" rel="stylesheet">
- 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create || notezy</title>
+  <link rel="stylesheet" href="../css/create.css">
+  
 </head>
-
-
 <body>
-  <div id="sidebar">
-    <div class="logo">
-      <i class="fas fa-pencil-alt"></i>
-      <span>Notezy </span>
-    </div>
-    
-    <div class="tool-section">
-      <h3><i class="fas fa-font"></i> Text Settings</h3>
-      <label>Font Size: 
-        <input type="number" id="fontSize" value="20" min="8" max="72">
-      </label>
-      <label>Font Family:
-        <select id="fontFamily">
-          <option value="Poppins">Poppins</option>
+  <div id="header">
+    <header>
+      <div id="tool-bar">
+        <!-- Formatting Tools -->
+        <input type="text" plceholder="untitled" id="filename">
+        <button class="tool-btn" data-tool="bold" title="Bold">
+          <i class="fas fa-bold"></i>
+        </button>
+        <button class="tool-btn" data-tool="italic" title="Italic">
+          <i class="fas fa-italic"></i>
+        </button>
+        <button class="tool-btn" data-tool="underline" title="Underline">
+          <i class="fas fa-underline"></i>
+        </button>
+
+        <!-- Font Size -->
+        <select class="font-size-select" title="Font Size">
+          <option value="12px">Small</option>
+          <option value="16px" selected>Medium</option>
+          <option value="20px">Large</option>
+          <option value="24px">Extra Large</option>
+        </select>
+
+        <!-- Font Family -->
+        <select class="font-family-select" title="Font Family">
           <option value="Arial">Arial</option>
           <option value="Georgia">Georgia</option>
-          <option value="'Roboto Mono', monospace">Roboto Mono</option>
           <option value="Courier New">Courier New</option>
+          <option value="Times New Roman">Times New Roman</option>
         </select>
-      </label>
-      <label>Color: 
-        <input type="color" id="fontColor" value="#000000">
-      </label>
-      <label>Padding: 
-        <input type="number" id="padding" value="0" min="0" max="50">
-      </label>
-      <label class="checkbox-container">
-        <input type="checkbox" id="isHeading"> 
-        <span>Heading Style</span>
-      </label>
-    </div>
-    
-    <div class="tool-section">
-      <h3><i class="fas fa-palette"></i> Canvas</h3>
-      <label>Background Color: 
-        <input type="color" id="bgColor" value="#ffffff">
-      </label>
-    </div>
+
+        <!-- Background Color -->
+        <div class="dropdown">
+          <button class="tool-btn" data-tool="bgcolor" title="Background Color">
+            <i class="fas fa-fill-drip"></i>
+          </button>
+          <div class="dropdown-content color-picker">
+            <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
+            <div class="color-option" style="background-color: #f5f6fa;" data-color="#f5f6fa"></div>
+            <div class="color-option" style="background-color: #fffacd;" data-color="#fffacd"></div>
+            <div class="color-option" style="background-color: #e6ffe6;" data-color="#e6ffe6"></div>
+            <div class="color-option" style="background-color: #e6f3ff;" data-color="#e6f3ff"></div>
+          </div>
+        </div>
+
+        <!-- Text Color -->
+        <div class="dropdown">
+          <button class="tool-btn" data-tool="textcolor" title="Text Color">
+            <i class="fas fa-palette"></i>
+          </button>
+          <div class="dropdown-content color-picker">
+            <div class="color-option" style="background-color: #000000;" data-color="#000000"></div>
+            <div class="color-option" style="background-color: #333333;" data-color="#333333"></div>
+            <div class="color-option" style="background-color: #6c5ce7;" data-color="#6c5ce7"></div>
+            <div class="color-option" style="background-color: #00b894;" data-color="#00b894"></div>
+            <div class="color-option" style="background-color: #d63031;" data-color="#d63031"></div>
+          </div>
+        </div>
+
+        <!-- Link -->
+        <button class="tool-btn" data-tool="link" title="Insert Link">
+          <i class="fas fa-link"></i>
+        </button>
+
+        <!-- Add Page -->
+        <button class="tool-btn" data-tool="addpage" title="Add Page">
+          <i class="fas fa-plus"></i>
+        </button>
+
+        <!-- Save -->
+        <button class="tool-btn save-btn" data-tool="save" title="Save" id="savepdf" >
+          <i class="fas fa-save"></i>
+        </button>
+
+        <!-- Dropper Menu -->
+        <div class="dropdown dropper">
+          <button class="tool-btn" title="Options">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <div class="dropdown-content">
+            <button class="drop-option" data-option="save">Save File</button>
+            <button class="drop-option" data-option="new">New File</button>
+            <button class="drop-option" data-option="import">Import File</button>
+            <button class="drop-option" data-option="export">Export File</button>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <div id="profile">
+          
+          <i class="fa-solid fa-user"></i>
+        </div>
+
+      </div>
+    </header>
   </div>
 
-  <canvas id="tutorial" width="1000" height="600"></canvas>
-  
-  <div class="fab tooltip" data-tooltip="Clear Canvas" id="clearBtn">
-    <i class="fas fa-trash-alt"></i>
-  </div>
+  <main>
+    <div id="side-bar">
+      <div id="pages">
+        <div class="page-tab active" data-page="1">
+          <i class="fa-solid fa-file"></i>
+          <span></span>
+        </div>
+        <div class="page-tab" data-page="2">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="page-tab" data-page="3">
+          <i class="fas fa-file-alt"></i>
+        </div>
+      </div>
+    </div>
 
-<script src="../js/create.js"></script>
+    <div id="window">
+      <div class="page active-page" contenteditable="true" data-page="1" id="trial">
+        
+      </div>
+      <div class="page" contenteditable="true" data-page="2" style="display: none;">
+        <h2>Ideas</h2>
+        <p>This is your ideas page. Brainstorm here...</p>
+      </div>
+      <div class="page" contenteditable="true" data-page="3" style="display: none;">
+        <h2>Tasks</h2>
+        <p>This is your tasks page. Organize your work here...</p>
+      </div>
+    </div>
+  </main>
 
-
-
-
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="../js/create.js"></script>
 </body>
 </html>

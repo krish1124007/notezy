@@ -1,203 +1,244 @@
+// === Active Style Tracking ===
+const activeStyles = {
+  bold: false,
+  italic: false,
+  underline: false,
+  color: null,
+  bgcolor: null,
+  fontSize: null,
+  fontFamily: null
+};
 
-  const canvas = document.getElementById('tutorial');
-  const ctx = canvas.getContext('2d');
+// === Style Wrapping Function ===
+function applyStyle(tagName, style = null) {
+  const selection = window.getSelection();
+  if (!selection.rangeCount) return;
 
-  let isTyping = false;
-  let currentLines = [''];
-  let cursorX = 0;
-  let cursorY = 0;
-  let showCursor = true;
-  const texts = [];
-  let canvasBgColor = '#ffffff';
-  let editingIndex = -1;
+  const range = selection.getRangeAt(0);
+  if (range.collapsed) return;
 
-  const fontSizeInput = document.getElementById('fontSize');
-  const fontFamilyInput = document.getElementById('fontFamily');
-  const fontColorInput = document.getElementById('fontColor');
-  const paddingInput = document.getElementById('padding');
-  const headingCheckbox = document.getElementById('isHeading');
-  const bgColorInput = document.getElementById('bgColor');
-  const clearBtn = document.getElementById('clearBtn');
+  const wrapper = document.createElement(tagName);
+  if (style) Object.assign(wrapper.style, style);
 
-  setInterval(() => {
-    if (isTyping) {
-      showCursor = !showCursor;
-      drawAll();
-    }
-  }, 500);
+  try {
+    wrapper.appendChild(range.extractContents());
+    range.insertNode(wrapper);
 
-  bgColorInput.addEventListener('input', (e) => {
-    canvasBgColor = e.target.value;
-    drawAll();
-  });
-
-  clearBtn.addEventListener('click', () => {
-    texts.length = 0;
-    drawAll();
-  });
-
-  canvas.addEventListener('click', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
-    // Check if clicked on existing text
-    const clicked = texts.findIndex(t => {
-      const width = ctx.measureText(t.text).width;
-      const height = t.fontSize;
-      return (
-        clickX >= t.x &&
-        clickX <= t.x + width + 10 &&
-        clickY >= t.y - height &&
-        clickY <= t.y
-      );
-    });
-
-    if (clicked !== -1) {
-      // Edit existing text
-      const t = texts[clicked];
-      editingIndex = clicked;
-      currentLines = [t.text];
-      cursorX = t.x;
-      cursorY = t.y - t.fontSize + t.padding;
-      isTyping = true;
-      showCursor = true;
-    } else {
-      // Save current first
-      if (isTyping && currentLines.some(line => line.trim() !== '')) {
-        saveCurrentText();
-      }
-
-      // Start new
-      editingIndex = -1;
-      cursorX = clickX;
-      cursorY = clickY;
-      currentLines = [''];
-      isTyping = true;
-      showCursor = true;
-    }
-
-    drawAll();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (!isTyping) return;
-
-    if (e.key === 'Escape') {
-      isTyping = false;
-      currentLines = [''];
-      editingIndex = -1;
-    } else if (e.key === 'Backspace') {
-      let lastLine = currentLines[currentLines.length - 1];
-      if (lastLine.length > 0) {
-        currentLines[currentLines.length - 1] = lastLine.slice(0, -1);
-      } else if (currentLines.length > 1) {
-        currentLines.pop();
-      }
-    } else if (e.key === 'Enter') {
-      currentLines.push('');
-    } else if (e.key.length === 1) {
-      currentLines[currentLines.length - 1] += e.key;
-    }
-
-    drawAll();
-  });
-
-  function saveCurrentText() {
-    if (currentLines.every(line => line.trim() === '')) {
-      if (editingIndex !== -1) {
-        texts.splice(editingIndex, 1);
-      }
-      isTyping = false;
-      currentLines = [''];
-      editingIndex = -1;
-      return;
-    }
-
-    const fontSize = headingCheckbox.checked
-      ? Math.min(parseInt(fontSizeInput.value) * 1.5, 72)
-      : parseInt(fontSizeInput.value);
-
-    if (editingIndex !== -1) {
-      // Replace the old line
-      const t = texts[editingIndex];
-      t.text = currentLines[0];
-      t.fontSize = fontSize;
-      t.fontFamily = fontFamilyInput.value;
-      t.color = fontColorInput.value;
-      t.padding = parseInt(paddingInput.value);
-      t.isHeading = headingCheckbox.checked;
-    } else {
-      currentLines.forEach((line, i) => {
-        if (line.trim() === '') return;
-
-        texts.push({
-          text: line,
-          x: cursorX,
-          y: cursorY + i * (fontSize + 10),
-          fontSize,
-          fontFamily: fontFamilyInput.value,
-          color: fontColorInput.value,
-          padding: parseInt(paddingInput.value),
-          isHeading: headingCheckbox.checked
-        });
-      });
-    }
-
-    isTyping = false;
-    currentLines = [''];
-    editingIndex = -1;
+    // Reset cursor
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.setStartAfter(wrapper);
+    newRange.collapse(true);
+    selection.addRange(newRange);
+  } catch (e) {
+    console.warn("Error wrapping:", e);
   }
+}
 
-  function drawAll() {
-    ctx.fillStyle = canvasBgColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+function wrapWithSpanStyle(styleObj) {
+  applyStyle("span", styleObj);
+}
 
-    texts.forEach(t => {
-      ctx.font = `${t.fontSize}px ${t.fontFamily}`;
-      ctx.fillStyle = t.color;
-      ctx.fillText(t.text, t.x + t.padding, t.y + t.padding);
+function insertLink(url) {
+  const selection = window.getSelection();
+  if (!selection.rangeCount) return;
+  const range = selection.getRangeAt(0);
+  if (range.collapsed) return;
 
-      if (t.isHeading) {
-        const textWidth = ctx.measureText(t.text).width;
-        ctx.strokeStyle = t.color;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(t.x + t.padding, t.y + t.padding + 5);
-        ctx.lineTo(t.x + t.padding + textWidth, t.y + t.padding + 5);
-        ctx.stroke();
+  const a = document.createElement("a");
+  a.href = url;
+  a.target = "_blank";
+
+  try {
+    a.appendChild(range.extractContents());
+    range.insertNode(a);
+
+    // Reset cursor
+    selection.removeAllRanges();
+    const newRange = document.createRange();
+    newRange.setStartAfter(a);
+    newRange.collapse(true);
+    selection.addRange(newRange);
+  } catch (e) {
+    console.warn("Link insert failed:", e);
+  }
+}
+
+// === Event Binding ===
+document.addEventListener("DOMContentLoaded", () => {
+  // Tool buttons
+  document.querySelectorAll(".tool-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const tool = button.dataset.tool;
+      const selection = window.getSelection();
+
+      switch (tool) {
+        case "bold":
+          if (selection.isCollapsed) {
+            activeStyles.bold = !activeStyles.bold;
+            button.classList.toggle("active", activeStyles.bold);
+          } else {
+            applyStyle("strong");
+          }
+          break;
+
+        case "italic":
+          if (selection.isCollapsed) {
+            activeStyles.italic = !activeStyles.italic;
+            button.classList.toggle("active", activeStyles.italic);
+          } else {
+            applyStyle("em");
+          }
+          break;
+
+        case "underline":
+          if (selection.isCollapsed) {
+            activeStyles.underline = !activeStyles.underline;
+            button.classList.toggle("active", activeStyles.underline);
+          } else {
+            applyStyle("u");
+          }
+          break;
+
+        case "fontsize":
+          const size = document.querySelector(".font-size-select").value;
+          if (selection.isCollapsed) {
+            activeStyles.fontSize = size;
+          } else {
+            wrapWithSpanStyle({ fontSize: size });
+          }
+          break;
+
+        case "fontfamily":
+          const family = document.querySelector(".font-family-select").value;
+          if (selection.isCollapsed) {
+            activeStyles.fontFamily = family;
+          } else {
+            wrapWithSpanStyle({ fontFamily: family });
+          }
+          break;
+
+        case "link":
+          const url = prompt("Enter a URL:");
+          if (url) insertLink(url);
+          break;
+
+        case "addpage":
+          addNewPage();
+          break;
+
+        case "save":
+          savePdf()
+          break;
       }
     });
+  });
 
-    if (isTyping) {
-      const fontSize = headingCheckbox.checked
-        ? Math.min(parseInt(fontSizeInput.value) * 1.5, 72)
-        : parseInt(fontSizeInput.value);
-      const fontFamily = fontFamilyInput.value;
-      const color = fontColorInput.value;
-      const padding = parseInt(paddingInput.value);
+  // Font size dropdown
+  document.querySelector(".font-size-select").addEventListener("change", (e) => {
+    const size = e.target.value;
+    activeStyles.fontSize = size;
 
-      ctx.font = `${fontSize}px ${fontFamily}`;
-      ctx.fillStyle = color;
-
-      currentLines.forEach((line, i) => {
-        const y = cursorY + i * (fontSize + 10) + padding;
-        ctx.fillText(line, cursorX + padding, y);
-      });
-
-      if (showCursor) {
-        const currentLine = currentLines[currentLines.length - 1];
-        const cursorWidth = ctx.measureText(currentLine).width;
-        const y = cursorY + (currentLines.length - 1) * (fontSize + 10) + padding;
-
-        ctx.beginPath();
-        ctx.moveTo(cursorX + cursorWidth + 2 + padding, y - fontSize * 0.8);
-        ctx.lineTo(cursorX + cursorWidth + 2 + padding, y);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
+    const selection = window.getSelection();
+    if (!selection.isCollapsed) {
+      wrapWithSpanStyle({ fontSize: size });
     }
-  }
+  });
 
-  drawAll();
+  // Font family dropdown
+  document.querySelector(".font-family-select").addEventListener("change", (e) => {
+    const family = e.target.value;
+    activeStyles.fontFamily = family;
+
+    const selection = window.getSelection();
+    if (!selection.isCollapsed) {
+      wrapWithSpanStyle({ fontFamily: family });
+    }
+  });
+
+  // Color Pickers
+  document.querySelectorAll('.color-option').forEach(opt => {
+    opt.addEventListener("click", () => {
+      const tool = opt.closest(".dropdown").querySelector("button").dataset.tool;
+      const color = opt.dataset.color;
+      const selection = window.getSelection();
+
+      if (tool === "textcolor") {
+        activeStyles.color = color;
+        if (!selection.isCollapsed) {
+          wrapWithSpanStyle({ color: color });
+        }
+      } else if (tool === "bgcolor") {
+        activeStyles.bgcolor = color;
+        if (!selection.isCollapsed) {
+          wrapWithSpanStyle({ backgroundColor: color });
+        }
+      }
+    });
+  });
+
+  // Typing Handler
+  document.querySelectorAll(".page").forEach(page => {
+    page.addEventListener("beforeinput", (e) => {
+      if (e.inputType === "insertText" && e.data && hasActiveStyles()) {
+        e.preventDefault();
+
+        const span = document.createElement("span");
+        if (activeStyles.bold) span.style.fontWeight = "bold";
+        if (activeStyles.italic) span.style.fontStyle = "italic";
+        if (activeStyles.underline) span.style.textDecoration = "underline";
+        if (activeStyles.color) span.style.color = activeStyles.color;
+        if (activeStyles.bgcolor) span.style.backgroundColor = activeStyles.bgcolor;
+        if (activeStyles.fontSize) span.style.fontSize = activeStyles.fontSize;
+        if (activeStyles.fontFamily) span.style.fontFamily = activeStyles.fontFamily;
+        span.textContent = e.data;
+
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        range.insertNode(span);
+
+        range.setStartAfter(span);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    });
+  });
+
+  // Page Switching
+  document.querySelectorAll(".page-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      const pageNum = tab.dataset.page;
+
+      document.querySelectorAll(".page-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      document.querySelectorAll(".page").forEach(page => {
+        if (page.dataset.page === pageNum) {
+          page.classList.add("active-page");
+          page.style.display = "block";
+        } else {
+          page.classList.remove("active-page");
+          page.style.display = "none";
+        }
+      });
+    });
+  });
+});
+
+function hasActiveStyles() {
+  return activeStyles.bold || activeStyles.italic || activeStyles.underline || activeStyles.color || activeStyles.bgcolor || activeStyles.fontSize || activeStyles.fontFamily;
+}
+
+function addNewPage() {
+  alert("Add Page feature coming soon!");
+}
+
+function savePdf()
+{
+    const trial = document.getElementById('trial')
+    const filename = document.getElementById('filename').value
+    html2pdf(trial).save(filename)
+}
+
+// document.getElementById('savepdf').addEventListener('click' ,savePdf)
