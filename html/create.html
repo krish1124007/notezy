@@ -72,10 +72,10 @@
 
         <!-- Background Color -->
         <div class="dropdown">
-          <button class="tool-btn" data-tool="bgcolor" title="Background Color">
+          <button class="tool-btn" data-tool="bgcolor" title="Background Color" id="bgcolor">
             <i class="fas fa-fill-drip"></i>
           </button>
-          <div class="dropdown-content color-picker">
+          <div class="dropdown-content color-picker" id="bgcolours">
             <div class="color-option" style="background-color: #ffffff;" data-color="#ffffff"></div>
             <div class="color-option" style="background-color: #f5f6fa;" data-color="#f5f6fa"></div>
             <div class="color-option" style="background-color: #fffacd;" data-color="#fffacd"></div>
@@ -103,6 +103,9 @@
           <i class="fas fa-link"></i>
         </button>
 
+        <button class="tool-btn" data-tool="table" title="Insert Table">
+          <i class="fa-solid fa-table"></i>
+        </button>
         <!-- Add Page -->
         <button class="tool-btn" data-tool="addpage" title="Add Page">
           <i class="fas fa-plus"></i>
@@ -131,6 +134,9 @@
           
           <i class="fa-solid fa-user"></i>
         </div>
+        <input type="text" style="width: 50px;" value="200" id="widthinput">
+        <div>X</div>
+        <input type="text" style="width: 50px;" value="100" id="heightinput">
 
       </div>
     </header>
@@ -143,12 +149,7 @@
           <i class="fa-solid fa-file"></i>
           <span></span>
         </div>
-        <div class="page-tab" data-page="2">
-          <i class="fas fa-file-alt"></i>
-        </div>
-        <div class="page-tab" data-page="3">
-          <i class="fas fa-file-alt"></i>
-        </div>
+  
       </div>
     </div>
 
@@ -156,20 +157,21 @@
       <div class="page active-page" contenteditable="true" data-page="1" id="trial">
         
       </div>
-      <div class="page" contenteditable="true" data-page="2" style="display: none;">
-        <h2>Ideas</h2>
-        <p>This is your ideas page. Brainstorm here...</p>
-      </div>
-      <div class="page" contenteditable="true" data-page="3" style="display: none;">
-        <h2>Tasks</h2>
-        <p>This is your tasks page. Organize your work here...</p>
-      </div>
+      
     </div>
   </main>
+  <div id="loading-spinner" style="display:none;">
+  <div class="spinner"></div>
+</div>
+
 
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
+
   <script src="../js/create.js"></script>
 </body>
 </html>
